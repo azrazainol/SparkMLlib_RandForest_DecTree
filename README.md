@@ -40,7 +40,7 @@ df = spark.createDataFrame(iris_df)
 
 ```
 
-### 
+### Format and Split Dataset
 
 
 
