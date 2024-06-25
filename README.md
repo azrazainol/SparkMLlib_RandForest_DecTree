@@ -2,6 +2,8 @@
 
 This assignment uses Spark MLlib to train a classification model on the Iris dataset.
 
+### Importing Libraries
+
 The first part of the code imports the libraries used for:
 
 ```python
@@ -17,7 +19,15 @@ from sklearn.metrics import confusion_matrix
 
 ```
 
-Next the Iris dataset is imported into the notebook:
+### Start Spark
+
+```python
+spark = SparkSession.builder.appName("IrisClassification").getOrCreate()
+```
+
+### Loading Iris Dataset
+
+Next the Iris dataset is imported into the notebook and converted into a Sprak dataframe:
 
 ```python
 # Load the Iris dataset
@@ -30,6 +40,7 @@ df = spark.createDataFrame(iris_df)
 
 ```
 
+### 
 
 
 
