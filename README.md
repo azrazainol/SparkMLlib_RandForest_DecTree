@@ -4,7 +4,7 @@ This assignment uses Spark MLlib to train a classification model on the Iris dat
 
 The first part of the code imports the Iris dataset
 
-```python:Assignment3_P137262.ipynb
+```python
 # Load the Iris dataset
 iris = load_iris()
 iris_df = pd.DataFrame(data=iris.data, columns=iris.feature_names)
