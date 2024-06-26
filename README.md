@@ -126,6 +126,7 @@ cvModel_dt = crossval_dt.fit(train_data)
 
 The best model defined by the cross-validation method for the Random Forest and Decision Tree are shown and explained below:
 
+**Random Forest**
 ```
 Random Forest Parameters
 numTrees: 10
@@ -134,20 +135,17 @@ bootstrap: True
 featureSubsetStrategy: auto
 impurity: gini
 ```
-
-**Random Forest**
 - The parameters for the Random Forest model shows that the best model contains 10 trees and has a maximum depth of 5. This means that 10 trees was found to be the optimal number of trees in the forest and the maximum number of times the tree splits is 5.
 - The bootstrap parameter indicates that each tree in the forest was trained using a random set of samples from the training dataset.
 - The feature subset strategy indicates the number of features to use for each split in the tree. The `auto` means that the number of features at each split is determined by using the squareroot of the number of features.
 - The impurity parameter indicates the method of measure for the quality of the splits. A lower impurity indicates better quality splits. This model uses `gini` which is a commonly used method for classification models and helps in selecting the best splits to create homogenous subsets.
 
+**Decison Tree**
 ```
 Decision Tree Parameters
 maxDepth: 5
 impurity: gini
 ```
-
-**Decison Tree**
 - The parameters for the Decision Tree model shows that the best model contains a maximum depth of 5, similar to the Random Forest model. This means that the tree may contain a maximum of 5 splits between the root node and the leaf (final node).
 - The impurity parameter is set to `gini` which is the same as the Random forest model.
 
@@ -155,6 +153,7 @@ impurity: gini
 
 The model evaluation metrics are shown below:
 
+**Random Forest**
 ```
 Random Forest Metrics:
 Accuracy: 0.9821428571428571
@@ -167,7 +166,7 @@ Confusion Matrix (Random Forest):
  [ 0 12  0]
  [ 0  1 18]]
 ```
-
+**Decison Tree**
 ```
 Decision Tree Metrics:
 Accuracy: 0.9821428571428571
