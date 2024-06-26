@@ -4,7 +4,7 @@ This assignment uses Spark MLlib to train a classification model on the Iris dat
 
 ### Importing Libraries
 
-The first part of the code imports the libraries used for:
+The first part of the code imports the libraries used.
 
 ```python
 from pyspark.sql import SparkSession
@@ -21,13 +21,15 @@ from sklearn.metrics import confusion_matrix
 
 ### Start Spark
 
+This part of the code starts the Spark session in Python to use Spark code format so that Python can interact with SQL's functionality.
+
 ```python
 spark = SparkSession.builder.appName("IrisClassification").getOrCreate()
 ```
 
 ### Loading Iris Dataset
 
-Next the Iris dataset is imported into the notebook and converted into a Sprak dataframe:
+Next the Iris dataset is imported into the notebook as a pandas dataframe and converted into a Spark dataframe so that it can be read by Spark:
 
 ```python
 # Load the Iris dataset
@@ -41,6 +43,8 @@ df = spark.createDataFrame(iris_df)
 ```
 
 ### Format and Split Dataset
+
+The data is converted into numerical vector format so that the model can interpret the data. Then the data is splitted into 70% training data and 30% testing data.
 
 ```python
 # Feature Engineering
@@ -57,6 +61,10 @@ train_data, test_data = df.randomSplit([0.7, 0.3], seed=42)
 ```
 
 ### Random Forest
+
+This section of code trains a Random Forest classifier for the dataset. First the parameters of the Random Forest is defined to be tested by the cross-validator. Then the training data is used to train the random forest model and cross-validation is performed to find the best model by.
+
+The parameter grid defined are `[10, 15, 20, 25, 30]` for the number of trees and `[5, 7, 10, 12, 15]` for the maximum tree depth. The cross-validation section will find the best parameters for the Random Forest based on the parameter grid defined. 
 
 ```python
 
@@ -81,45 +89,13 @@ crossval_rf = CrossValidator(estimator=pipeline_rf,
 # Train the Random Forest model using cross-validation
 cvModel_rf = crossval_rf.fit(train_data)
 
-# Print best model parameters for Random Forest
-best_rf_model = cvModel_rf.bestModel.stages[-1]
-print("Random Forest - Best Model Parameters:")
-print(best_rf_model.extractParamMap())
-print()
-
-# Make predictions on the test data using Random Forest
-predictions_rf = cvModel_rf.transform(test_data)
-
-# Evaluate Random Forest model
-evaluator_rf = MulticlassClassificationEvaluator(labelCol="indexedLabel", metricName="accuracy")
-accuracy_rf = evaluator_rf.evaluate(predictions_rf)
-
-evaluator_rf.setMetricName("weightedPrecision")
-precision_rf = evaluator_rf.evaluate(predictions_rf)
-
-evaluator_rf.setMetricName("weightedRecall")
-recall_rf = evaluator_rf.evaluate(predictions_rf)
-
-evaluator_rf.setMetricName("f1")
-f1_score_rf = evaluator_rf.evaluate(predictions_rf)
-
-# Print evaluation metrics for Random Forest
-print("Random Forest Metrics:")
-print(f"Accuracy: {accuracy_rf}")
-print(f"Precision: {precision_rf}")
-print(f"Recall: {recall_rf}")
-print(f"F1 Score: {f1_score_rf}")
-print()
-
-# Compute confusion matrix for Random Forest
-y_true_rf = predictions_rf.select("indexedLabel").toPandas()
-y_pred_rf = predictions_rf.select("prediction").toPandas()
-
-cm_rf = confusion_matrix(y_true_rf, y_pred_rf)
-print("Confusion Matrix (Random Forest):\n", cm_rf)
-print()
-
 ```
+
+### Decision Tree
+
+After the random forest model was trained, the Decision Tree classifier model was trained to compare the performance of the two models so that the best model between the two can be used for future predictions.
+
+Similarly to the steps performed for the Random Forest model, the parameter grid for the Decision Tree was initially defined with a maximum depth of the tree as `[5, 7, 10, 12, 15]`. Then the model is fed with the training data and cross-validation was performed to get the best model for the Decision Tree model.
 
 ```python
 
@@ -142,47 +118,8 @@ crossval_dt = CrossValidator(estimator=pipeline_dt,
 
 # Train the Decision Tree model using cross-validation
 cvModel_dt = crossval_dt.fit(train_data)
-
-# Print best model parameters for Decision Tree
-best_dt_model = cvModel_dt.bestModel.stages[-1]
-print("Decision Tree - Best Model Parameters:")
-print(best_dt_model.extractParamMap())
-print()
-
-# Make predictions on the test data using Decision Tree
-predictions_dt = cvModel_dt.transform(test_data)
-
-# Evaluate Decision Tree model
-evaluator_dt = MulticlassClassificationEvaluator(labelCol="indexedLabel", metricName="accuracy")
-accuracy_dt = evaluator_dt.evaluate(predictions_dt)
-
-evaluator_dt.setMetricName("weightedPrecision")
-precision_dt = evaluator_dt.evaluate(predictions_dt)
-
-evaluator_dt.setMetricName("weightedRecall")
-recall_dt = evaluator_dt.evaluate(predictions_dt)
-
-evaluator_dt.setMetricName("f1")
-f1_score_dt = evaluator_dt.evaluate(predictions_dt)
-
-# Print evaluation metrics for Decision Tree
-print("Decision Tree Metrics:")
-print(f"Accuracy: {accuracy_dt}")
-print(f"Precision: {precision_dt}")
-print(f"Recall: {recall_dt}")
-print(f"F1 Score: {f1_score_dt}")
-print()
-
-# Compute confusion matrix for Decision Tree
-y_true_dt = predictions_dt.select("indexedLabel").toPandas()
-y_pred_dt = predictions_dt.select("prediction").toPandas()
-
-cm_dt = confusion_matrix(y_true_dt, y_pred_dt)
-print("Confusion Matrix (Decision Tree):\n", cm_dt)
-print()
-
-# Stop the Spark session
-spark.stop()
-
 ```
+
+### Results and Discussion
+
 
