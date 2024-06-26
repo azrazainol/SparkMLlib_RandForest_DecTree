@@ -120,6 +120,16 @@ crossval_dt = CrossValidator(estimator=pipeline_dt,
 cvModel_dt = crossval_dt.fit(train_data)
 ```
 
+### Stop Spark Session
+
+The Spark session is stopped to end Python interaction with Spark.
+
+```python
+# Stop the Spark session
+spark.stop()
+```
+
+
 ### Results and Discussion
 
 #### Model Parameters
