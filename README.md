@@ -44,7 +44,7 @@ df = spark.createDataFrame(iris_df)
 
 ### Format and Split Dataset
 
-The data is converted into numerical vector format so that the model can interpret the data. Then the data is splitted into 70% training data and 30% testing data.
+The data is converted into numerical vector format using `VectorAssembler` so that the model can interpret the data. The data is splitted into 70% training data and 30% testing data.
 
 ```python
 # Feature Engineering
@@ -122,4 +122,71 @@ cvModel_dt = crossval_dt.fit(train_data)
 
 ### Results and Discussion
 
+#### Model Parameters
 
+The best model defined by the cross-validation method for the Random Forest and Decision Tree are shown and explained below:
+
+```
+Random Forest Parameters
+numTrees: 10
+maxDepth: 5
+bootstrap: True
+featureSubsetStrategy: auto
+impurity: gini
+```
+
+**Random Forest**
+- The parameters for the Random Forest model shows that the best model contains 10 trees and has a maximum depth of 5. This means that 10 trees was found to be the optimal number of trees in the forest and the maximum number of times the tree splits is 5.
+- The bootstrap parameter indicates that each tree in the forest was trained using a random set of samples from the training dataset.
+- The feature subset strategy indicates the number of features to use for each split in the tree. The `auto` means that the number of features at each split is determined by using the squareroot of the number of features.
+- The impurity parameter indicates the method of measure for the quality of the splits. A lower impurity indicates better quality splits. This model uses `gini` which is a commonly used method for classification models and helps in selecting the best splits to create homogenous subsets.
+
+```
+Decision Tree Parameters
+maxDepth: 5
+impurity: gini
+```
+
+**Decison Tree**
+- The parameters for the Decision Tree model shows that the best model contains a maximum depth of 5, similar to the Random Forest model. This means that the tree may contain a maximum of 5 splits between the root node and the leaf (final node).
+- The impurity parameter is set to `gini` which is the same as the Random forest model.
+
+#### Model Evaluation Metrics
+
+The model evaluation metrics are shown below:
+
+```
+Random Forest Metrics:
+Accuracy: 0.9821428571428571
+Precision: 0.9835164835164836
+Recall: 0.9821428571428572
+F1 Score: 0.9822586872586874
+
+Confusion Matrix (Random Forest):
+ [[25  0  0]
+ [ 0 12  0]
+ [ 0  1 18]]
+```
+
+```
+Decision Tree Metrics:
+Accuracy: 0.9821428571428571
+Precision: 0.9835164835164836
+Recall: 0.9821428571428572
+F1 Score: 0.9822586872586874
+
+Confusion Matrix (Decision Tree):
+ [[25  0  0]
+ [ 0 12  0]
+ [ 0  1 18]]
+```
+
+It can be seen that both models outcome for all metrics are the same. The reason both models have similar outcomes may be due to the size of the dataset being small. One of the rules of a good model is to be as simple as possible while retaining high performance. In this case, both models are equally based on the evaluation metrics. Due to that, the Decision Tree model would be the better model to use for future predictions as the results are the same despite using less computational cost.
+
+Based on the results of the evaluation metrics, the accuracy of the model is 0.982 which means that the model classified 98.2% of the testing dataset correctly.
+Then the precision metric, 0.983, shows that the proportion of true positive predictions against the total positive predictions for this model is 98.3%.
+The recall metric, 0.982, shows that the the proportion of true positive predictions against the actual number of positive instances for this model is 98.2%.
+The F1 score metric shows the combined value of the precision and recall metrics to create a more balanced evaluation metric, making sure that it considers any imbalance among classes. The model has an F1 score of 0.982 which means that the balance between precision and recall for this model is 98.2%.
+Based on the Confusion Matrix, the model only misclassified once which is a Virginica type wrongly classified as Versicolor type.
+
+To conclude, the simpler model, the Decision Tree model, is chosen as the better model because it produces the same outcome while also using minimal computational costs. With an accuracy and F1 score both at 98.2%, the model proves to be performing well.
