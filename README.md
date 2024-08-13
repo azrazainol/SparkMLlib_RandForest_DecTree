@@ -1,4 +1,5 @@
-# STQD6324_Assignment_03
+# Random Forest and Decision Tree models for predicting Iris Plant Class
+## STQD6324_Assignment_03
 
 This assignment uses Spark MLlib to train a classification model on the Iris dataset.
 
